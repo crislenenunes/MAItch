@@ -1,4 +1,4 @@
-# Programa de Capacitação CRMatch
+# Programa de Capacitação CRMAItch
 
 Acesse o meu projeto de classificação de candidatos no Hugging Face [aqui](https://huggingface.co/spaces/Crislene/MAITch).
 
