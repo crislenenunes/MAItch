@@ -1,87 +1,138 @@
-# Programa de Capacitação CRMAItch
+# Programa de Capacitação CRMatch
 
-Acesse o meu projeto de classificação de candidatos no Hugging Face [aqui](https://huggingface.co/spaces/Crislene/MAITch).
+Este repositório apresenta o sistema completo de inscrição, avaliação e classificação de candidatos do Programa de Capacitação CRMatch. Desenvolvido com foco em diversidade, inclusão e transformação social, o projeto integra tecnologias modernas como Gradio, Google Sheets e algoritmos de aprendizado de máquina para garantir a equidade na seleção de talentos nas áreas de CRM e Inteligência Artificial.
 
+> Acesse o projeto no Hugging Face: [https://huggingface.co/spaces/Crislene/MAITch]
+
+---
 
 ## Visão Geral
 
-O **Programa de Capacitação CRMatch** é uma iniciativa focada em promover a inclusão de grupos diversos no mercado de trabalho, com ênfase em áreas de CRM e inteligência artificial. O programa oferece oportunidades de estágio e capacitação para pessoas de diferentes perfis, incluindo mulheres, negros, pardos, indígenas, pessoas com deficiência (PCD), pessoas neurodiversas, e membros da comunidade LGBTQIA+.
+O Programa de Capacitação CRMatch tem como propósito central democratizar o acesso ao conhecimento e às oportunidades profissionais em tecnologia. A iniciativa visa incluir grupos historicamente sub-representados no mercado de trabalho, promovendo capacitação técnica aliada à prática profissional, especialmente nas áreas de Customer Relationship Management (CRM) e Inteligência Artificial.
 
-Este repositório contém o sistema de inscrição e avaliação dos candidatos, baseado em um formulário interativo criado com a biblioteca **Gradio** e integrado ao Google Sheets para registro das inscrições. O sistema é projetado para garantir a diversidade nas seleções, utilizando um modelo de classificação baseado em cotas e ampla concorrência.
+Grupos prioritários incluem:
+- Mulheres;
+- Pessoas negras, pardas e indígenas;
+- Pessoas com deficiência (PCD), incluindo neurodiversas;
+- Pessoas LGBTQIA+.
+
+O projeto adota um processo de seleção estruturado em critérios objetivos, garantindo tanto a diversidade quanto a aderência aos requisitos da capacitação e estágio. O sistema automatiza desde a inscrição até a classificação, respeitando um modelo híbrido de cotas e ampla concorrência.
+
+---
 
 ## Funcionalidades
 
-### 1. **Sistema de Cotas**
+### 1. Sistema de Cotas Integrado
 
-O sistema de cotas visa garantir uma distribuição justa das vagas, priorizando a inclusão de grupos que historicamente possuem menos acesso ao mercado de trabalho. A alocação das vagas é feita com base nos seguintes critérios:
+O sistema de cotas implementado assegura uma distribuição justa e proporcional das vagas. A lógica de classificação reserva as seguintes proporções:
 
-- **PCD**: 10% das vagas são destinadas a pessoas com deficiência, com uma subcategoria para pessoas neurodiversas.
-- **Raça**: 10% das vagas são destinadas a pessoas negras, pardas e indígenas.
-- **Gênero**: 10% das vagas são destinadas a mulheres e pessoas não binárias.
-- **LGBTQIA+**: 5% das vagas são destinadas a membros da comunidade LGBTQIA+.
-- **Ampla Concorrência**: 65% das vagas são destinadas a candidatos sem especificação de cota, mas que ainda atendem aos critérios gerais do programa.
+- **10%**: Pessoas com deficiência (PCD), com atenção especial à neurodiversidade;
+- **10%**: Pessoas negras, pardas e indígenas;
+- **10%**: Mulheres e pessoas não binárias;
+- **5%**: Pessoas LGBTQIA+;
+- **65%**: Ampla concorrência (candidatos que atendem aos critérios técnicos, sem estar em grupos de cota).
 
-As vagas são alocadas com base em uma classificação que leva em consideração as respostas dos candidatos aos campos de **PCD**, **Raça**, **Gênero**, e **LGBTQIA+**. Quando as vagas reservadas pelas cotas são preenchidas, os candidatos vão para a categoria de **Ampla Concorrência**.
+Candidatos podem ser classificados em mais de um critério de diversidade, mas a priorização obedece a uma ordem lógica de preenchimento. Ao atingir o limite de vagas de cada grupo, os candidatos excedentes são realocados para a ampla concorrência, respeitando os critérios mínimos de elegibilidade.
 
-### 2. **Classificação de Candidatos**
+### 2. Classificação de Candidatos com Base em Critérios Técnicos e de Diversidade
 
-A classificação dos candidatos é realizada com base nos seguintes critérios:
+#### a) Elegibilidade Técnica
 
-- **Critérios para Aprovação**: Para ser aprovado, o candidato precisa atender a um conjunto de critérios básicos de elegibilidade, como possuir computador e internet, disponibilidade de horário, e interesse no estágio. Além disso, os candidatos são avaliados para garantir que pelo menos 35% das vagas sejam preenchidas por grupos diversos.
-  
-- **Critérios de Reprovação**: Caso o candidato não preencha os critérios necessários, ele será reprovado e não poderá seguir na seleção. A mensagem de retorno será genérica e positiva, sem detalhamento dos motivos específicos de reprovação.
+Para ser considerado apto à capacitação, o candidato deve atender aos seguintes critérios:
 
-- **Lista de Espera**: Quando o número de vagas é preenchido, os candidatos restantes são colocados na lista de espera, com uma posição atribuída conforme a ordem de chegada. A lista de espera pode ser usada caso surjam vagas adicionais.
+- Estar cursando ensino superior a partir do 2º semestre;
+- Ter previsão de formatura com pelo menos 13 meses de antecedência;
+- Possuir computador e acesso à internet;
+- Ter disponibilidade de horário compatível;
+- Aceitar participar de estágio após a capacitação;
+- Demonstrar interesse em atuar com CRM.
 
-### 3. **Integração com o Google Sheets**
+#### b) Distribuição de Vagas
 
-O sistema está integrado ao Google Sheets para registrar os dados dos candidatos de maneira eficiente. A conexão com o Google Sheets é configurada através de uma chave privada, usando o **Google API** para autenticação.
+Com base nos dados coletados, o sistema atribui o resultado final conforme as cotas e os critérios técnicos. As opções de retorno ao candidato são:
 
-#### Configuração da Chave Privada
+- **Aprovado**: Vaga confirmada, dentro da cota ou ampla concorrência;
+- **Lista de Espera**: Vagas preenchidas, mas com possibilidade de realocação futura;
+- **Não Aprovado**: Critérios técnicos não atendidos. A resposta é sempre respeitosa, sem detalhamento dos motivos da não aprovação.
 
-Para garantir a conexão segura com o Google Sheets, o projeto requer a chave de serviço (JSON) para acessar a planilha do Google. A chave é configurada através da variável de ambiente **SERVICE_ACCOUNT_JSON**, que contém as credenciais necessárias para a autenticação.
+### 3. Modelo de Classificação com Machine Learning
 
-### 4. **Análise de Dados e Machine Learning (opcional)**
+O núcleo inteligente do sistema é um **modelo de árvore de decisão**, treinado com **20.000 registros simulados** para representar diferentes perfis de candidatos. O modelo é responsável por analisar múltiplos fatores simultaneamente, atribuindo uma classificação final a cada candidatura.
 
-Embora não seja uma funcionalidade obrigatória, a análise de clusters dos dados é realizada usando o **KMeans** para agrupar candidatos com base em variáveis como gênero, etnia, e semestre. Esta funcionalidade ajuda a entender padrões no comportamento de candidatos e ajustar futuras seleções de maneira mais precisa.
+#### Principais características do modelo:
 
-### 5. **Formulário Gradio**
+- **Tipo**: Árvore de Decisão (DecisionTreeClassifier – Scikit-learn);
+- **Dados de treinamento**: Sintéticos, balanceados e variados;
+- **Variáveis analisadas**: Gênero, etnia, orientação sexual, deficiência, semestre atual, previsão de formatura, acesso a computador, nível de inglês, disponibilidade, interesse em CRM e estágio, entre outras;
+- **Saída**: Aprovado ou não aprovado, com posterior aplicação da regra de distribuição por cotas.
 
-O formulário de inscrição é feito com a biblioteca **Gradio**, que permite uma interface visual simples e interativa. Os usuários preenchem informações pessoais, acadêmicas e profissionais, e o sistema classifica automaticamente suas candidaturas com base nos critérios mencionados.
+Além da classificação, o sistema gera **métricas de desempenho**, como matriz de confusão, curva ROC e importância das variáveis (feature importance), permitindo avaliar e ajustar continuamente a assertividade do modelo.
 
-#### Campos Condicionais
+### 4. Integração com o Google Sheets
 
-O formulário apresenta campos condicionais que aparecem dependendo das respostas do candidato. Por exemplo, se o candidato responder que é **Pessoa com Deficiência (PCD)**, campos adicionais para especificar o tipo de deficiência e necessidades de acessibilidade serão exibidos.
+Todas as candidaturas são registradas automaticamente em uma aba dedicada no Google Sheets por meio de autenticação via API do Google. A conexão é estabelecida com uma chave de serviço configurada através de variável de ambiente (`SERVICE_ACCOUNT_JSON`), garantindo segurança e sigilo dos dados.
+
+A planilha armazena as seguintes colunas:
+
+- Nome completo;
+- E-mail;
+- Telefone;
+- Data de nascimento;
+- Gênero;
+- Etnia;
+- Identificação LGBTQIA+;
+- Identificação como PCD e tipo de deficiência;
+- Curso, instituição, semestre atual e previsão de conclusão;
+- Acesso a computador e internet;
+- Nível de inglês;
+- Participação anterior em capacitações;
+- Interesse em CRM e estágio;
+- Resultado da classificação;
+- Data de inscrição.
+
+### 5. Interface com Gradio
+
+O formulário interativo foi desenvolvido com a biblioteca Gradio, proporcionando uma experiência acessível, intuitiva e responsiva aos candidatos.
+
+#### Campos Dinâmicos
+
+O sistema possui lógica condicional: campos adicionais são exibidos dependendo das respostas do candidato. Por exemplo, ao selecionar “Sim” para PCD, surgem campos específicos para descrição da deficiência e necessidades de acessibilidade.
+
+### 6. Inteligência de Dados (Funcionalidade Complementar)
+
+Para análise exploratória, o projeto oferece um módulo de clusterização com KMeans, que permite agrupar os candidatos de acordo com características como gênero, etnia e semestre. Essa funcionalidade, embora opcional, fornece insumos valiosos para ajustes de estratégia de inclusão e políticas futuras.
 
 ---
 
-## Como Funciona
+## Fluxo de Funcionamento
 
-### 1. **Processamento de Candidaturas**
-
-Quando um candidato se inscreve, as informações são verificadas com base nos critérios estabelecidos. Se a candidatura for aprovada, os dados são registrados no Google Sheets, e o candidato recebe uma resposta positiva. Caso contrário, ele é colocado na lista de espera ou informado que a vaga foi preenchida.
-
-### 2. **Cadastro no Google Sheets**
-
-A integração com o Google Sheets permite que todas as candidaturas sejam armazenadas de maneira organizada. A planilha de respostas está configurada para armazenar as seguintes colunas:
-
-- **Nome**: Nome completo do candidato.
-- **E-mail**: Endereço de e-mail para contato.
-- **Telefone**: Número de telefone.
-- **Data de Nascimento**: Data de nascimento do candidato.
-- **Gênero**: Gênero do candidato.
-- **Etnia**: Etnia do candidato.
-- **LGBTQIA+**: Se o candidato é membro da comunidade LGBTQIA+.
-- **PCD**: Se o candidato é uma pessoa com deficiência.
-- **Capacitação Anterior**: Se o candidato já participou de algum programa de capacitação da CRMatch.
-- **Interesse em CRM**: Se o candidato tem interesse em trabalhar com CRM.
-- **Interesse em Estágio**: Se o candidato tem interesse em estágio.
-
-### 3. **Modelagem e Algoritmos**
-
-O modelo de árvore de decisão é usado para classificar os candidatos de acordo com as cotas e ampla concorrência. Ele verifica a elegibilidade dos candidatos para as vagas e atribui os resultados de "Apto", "Lista de Espera" ou "Não Apto".
+1. **Preenchimento do Formulário**: O candidato fornece seus dados de forma voluntária.
+2. **Validação e Classificação com IA**: O modelo de árvore de decisão avalia a candidatura com base técnica e de diversidade.
+3. **Resposta Automatizada**: O candidato recebe mensagem de aprovação, reprovação ou espera.
+4. **Registro da Inscrição**: A candidatura é enviada automaticamente ao Google Sheets.
+5. **Análise Preditiva (opcional)**: Clusters são gerados para compreensão de perfis.
 
 ---
+
+## Melhorias Futuras
+
+- Substituição do modelo atual por Random Forest ou XGBoost, para maior robustez e capacidade preditiva;
+- Dashboard interativo: Visualização gráfica da distribuição dos inscritos, vagas por cota, taxa de aprovação e outros indicadores;
+- Aprimoramento em acessibilidade: Inclusão de suporte multilíngue e leitores de tela para maior inclusão digital;
+- Expansão do programa: Possibilidade de aplicação do mesmo modelo para outras áreas, como marketing digital, análise de dados e desenvolvimento front-end.
+
+---
+
+## Autoria
+
+Este projeto foi idealizado, desenvolvido e documentado por **Crislene Nunes** durante o Bootcamp de LLM (Modelos de Linguagem de Grande Escala) da **SoulCode Academy**, com apoio institucional do **Grupo Petrópolis**. A iniciativa integra competências em desenvolvimento de sistemas, inteligência artificial aplicada e inclusão sociotécnica.
+
+---
+
+## Licença e Uso
+
+Este repositório está disponível **exclusivamente para fins educacionais e demonstrativos**. É vedada a utilização comercial, modificação para uso corporativo ou qualquer redistribuição sem a autorização expressa da autora.
+
 
 ## Melhorias Futuras
 
@@ -91,11 +142,5 @@ O modelo de árvore de decisão é usado para classificar os candidatos de acord
 
 - **Expansão para Outras Áreas**: O programa pode ser expandido para outras áreas além de CRM e IA, como marketing digital ou recursos humanos, aumentando as oportunidades de inclusão.
 
----
 
-Este README proporciona uma visão detalhada sobre o funcionamento do sistema, suas funcionalidades e a lógica por trás da distribuição das vagas. O sistema de cotas, classificação e integração com o Google Sheets são os pilares do projeto, que visa aumentar a diversidade e a inclusão no mercado de trabalho.
 
----
-
-##Bootcamp
-📌 Este projeto foi desenvolvido durante o Bootcamp de LLM (Modelos de Linguagem de Grande Escala) da SoulCode Academy, com apoio do Grupo Petrópolis.
