@@ -65,51 +65,42 @@ def validar_candidatura(nome, email, telefone, nascimento, genero, etnia, lgbt, 
                        interesse_crm, interesse_estagio):
     erros = []
     
-    # Validações básicas
+    # Validações básicas (dados obrigatórios para todos)
     if not nome: erros.append("Nome é obrigatório.")
     if not validar_email(email): erros.append("E-mail inválido.")
     if not telefone: erros.append("Telefone é obrigatório.")
-    
-    # Validação de idade (18+)
-    try:
-        data_nasc = datetime.strptime(nascimento, "%d/%m/%Y")
-        idade = (datetime.now() - data_nasc).days // 365
-        if idade < 18:
-            erros.append("Você deve ter 18 anos ou mais.")
-    except:
-        erros.append("Data de nascimento inválida (use DD/MM/AAAA).")
-    
-    # Validações de perfil
     if not genero: erros.append("Gênero é obrigatório.")
     if not etnia: erros.append("Etnia é obrigatória.")
     if not lgbt: erros.append("Informação sobre LGBTQIA+ é obrigatória.")
     if not pcd: erros.append("Informação sobre PCD é obrigatória.")
+    if not cursando: erros.append("Informe se está cursando faculdade.")
+    if not computador: erros.append("Informe se possui computador.")
+    if not disponibilidade: erros.append("Informe sua disponibilidade.")
+    if not ingles: erros.append("Informe seu nível de inglês.")
+    if interesse_crm not in ["Sim", "Não"]: erros.append("Informe interesse em CRM.")
+    if interesse_estagio not in ["Sim", "Não"]: erros.append("Informe interesse em estágio.")
     
-    # Validações acadêmicas
-    if cursando != "Sim":
-        erros.append("Você deve estar cursando faculdade.")
-    else:
+    # Validação de formato de dados básicos
+    try:
+        datetime.strptime(nascimento, "%d/%m/%Y")
+    except:
+        erros.append("Data de nascimento inválida (use DD/MM/AAAA).")
+    
+    # Validações específicas para quem está cursando
+    if cursando == "Sim":
         if not curso: erros.append("Informe o curso.")
         if not instituicao: erros.append("Informe a instituição.")
+        if not semestre: erros.append("Informe o semestre.")
         try:
-            if int(semestre) < 2:
-                erros.append("Você deve estar pelo menos no 2º semestre.")
+            int(semestre)  # Apenas verifica se é número válido
         except:
             erros.append("Semestre inválido.")
-    
-    # Validação de previsão de conclusão
-    try:
-        meses_restantes = (datetime.strptime(previsao, "%m/%Y") - datetime.now()).days // 30
-        if meses_restantes < 13:
-            erros.append("A conclusão deve ser daqui a pelo menos 13 meses.")
-    except:
-        erros.append("Previsão de conclusão inválida (use MM/AAAA).")
-    
-    # Validações técnicas
-    if computador != "Sim": erros.append("É necessário ter computador.")
-    if ingles == "Nenhum": erros.append("É necessário ter pelo menos inglês básico.")
-    if interesse_crm != "Sim": erros.append("É necessário interesse em trabalhar com CRM.")
-    if interesse_estagio != "Sim": erros.append("É necessário interesse em estágio.")
+        
+        if not previsao: erros.append("Informe a previsão de conclusão.")
+        try:
+            datetime.strptime(previsao, "%m/%Y")
+        except:
+            erros.append("Previsão de conclusão inválida (use MM/AAAA).")
     
     return erros
 
@@ -118,17 +109,22 @@ def verificar_requisitos_minimos(dados):
         data_nasc = datetime.strptime(dados["Data de Nascimento"], "%d/%m/%Y")
         idade = (datetime.now() - data_nasc).days // 365
         
-        meses_restantes = (datetime.strptime(dados["Previsão de Conclusão"], "%m/%Y") - datetime.now()).days // 30
+        # Verificação condicional para quem está cursando
+        if dados["Cursando"] == "Sim":
+            meses_restantes = (datetime.strptime(dados["Previsão de Conclusão"], "%m/%Y") - datetime.now()).days // 30
+            semestre_valido = int(dados["Semestre"]) >= 2
+        else:
+            meses_restantes = 13  # Assume válido se não está cursando
+            semestre_valido = True  # Não aplicável
         
         return (
             idade >= 18 and
-            dados["Cursando"] == "Sim" and
-            int(dados["Semestre"]) >= 2 and
-            meses_restantes >= 13 and
             dados["Computador"] == "Sim" and
             dados["Inglês"] != "Nenhum" and
             dados["Interesse CRM"] == "Sim" and
-            dados["Interesse Estágio"] == "Sim"
+            dados["Interesse Estágio"] == "Sim" and
+            semestre_valido and
+            (dados["Cursando"] != "Sim" or meses_restantes >= 13)
         )
     except:
         return False
@@ -256,10 +252,10 @@ def processar_candidatura(nome, email, telefone, nascimento,
         "LGBT": lgbt,
         "PCD": pcd,
         "Cursando": cursando,
-        "Semestre": semestre,
-        "Curso": curso,
-        "Instituição": instituicao,
-        "Previsão de Conclusão": previsao,
+        "Semestre": semestre if cursando == "Sim" else "",
+        "Curso": curso if cursando == "Sim" else "",
+        "Instituição": instituicao if cursando == "Sim" else "",
+        "Previsão de Conclusão": previsao if cursando == "Sim" else "",
         "Computador": computador,
         "Disponibilidade": disponibilidade,
         "Inglês": ingles,
@@ -304,9 +300,9 @@ def processar_candidatura(nome, email, telefone, nascimento,
         else:
             return f"""
             <div style='background:#ffebee; padding:20px; border-radius:10px;'>
-                <h3>⚠️ Vagas esgotadas</h3>
-                <p>Status: {status} - {detalhe}</p>
-                <p>Todas as vagas foram preenchidas. Fique atento às próximas turmas!</p>
+                <h3>⚠️ {detalhe}</h3>
+                <p>Status: {status}</p>
+                <p>Infelizmente sua candidatura não atendeu aos requisitos do programa.</p>
             </div>
             """
     except Exception as e:
@@ -372,13 +368,28 @@ with gr.Blocks(title="🚀 Programa de Capacitação CRMatch – Inscreva-se", c
 
     with gr.Row():
         cursando = gr.Radio(label="Você está cursando o ensino superior?*", choices=["Sim", "Não"])
-        semestre = gr.Dropdown(label="Semestre atual*", choices=[str(i) for i in range(1, 11)])
+        semestre = gr.Dropdown(label="Semestre atual", choices=[str(i) for i in range(1, 11)], visible=False)
 
     with gr.Row():
-        curso = gr.Textbox(label="Curso*", placeholder="Ex: Administração")
-        instituicao = gr.Textbox(label="Instituição*", placeholder="Ex: Universidade de São Paulo")
+        curso = gr.Textbox(label="Curso", placeholder="Ex: Administração", visible=False)
+        instituicao = gr.Textbox(label="Instituição", placeholder="Ex: Universidade de São Paulo", visible=False)
 
-    previsao = gr.Textbox(label="Previsão de Conclusão* (MM/AAAA)", placeholder="Ex: 12/2025")
+    previsao = gr.Textbox(label="Previsão de Conclusão", placeholder="MM/AAAA", visible=False)
+
+    def toggle_campos_faculdade(cursando):
+        visible = cursando == "Sim"
+        return [
+            gr.update(visible=visible),  # semestre
+            gr.update(visible=visible),  # curso
+            gr.update(visible=visible),  # instituicao
+            gr.update(visible=visible)   # previsao
+        ]
+
+    cursando.change(
+        fn=toggle_campos_faculdade,
+        inputs=cursando,
+        outputs=[semestre, curso, instituicao, previsao]
+    )
 
     with gr.Row():
         computador = gr.Radio(label="Você possui computador/notebook com acesso a internet?*", choices=["Sim", "Não"])
