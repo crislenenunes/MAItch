@@ -1,6 +1,6 @@
-# Programa de Capacitação CRMatch
+# Programa de Capacitação CRMAItch
 
-Este repositório apresenta o sistema completo de inscrição, avaliação e classificação de candidatos do Programa de Capacitação CRMatch. Desenvolvido com foco em diversidade, inclusão e transformação social, o projeto integra tecnologias modernas como Gradio, Google Sheets e algoritmos de aprendizado de máquina para garantir a equidade na seleção de talentos nas áreas de CRM e Inteligência Artificial.
+Este repositório apresenta o sistema completo de inscrição, avaliação e classificação de candidatos do Programa de Capacitação CRMAItch. Desenvolvido com foco em diversidade, inclusão e transformação social, o projeto integra tecnologias modernas como Gradio, Google Sheets e algoritmos de aprendizado de máquina para garantir a equidade na seleção de talentos nas áreas de CRM e Inteligência Artificial.
 
 > Acesse o projeto no Hugging Face: [https://huggingface.co/spaces/Crislene/MAITch]
 
