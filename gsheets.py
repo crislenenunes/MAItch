@@ -8,13 +8,14 @@ class GSheetsManager:
             "https://www.googleapis.com/auth/spreadsheets",
             "https://www.googleapis.com/auth/drive"
         ]
-
+        
         try:
             creds = Credentials.from_service_account_info(credenciais, scopes=self.scope)
             self.client = gspread.authorize(creds)
+            print("Autenticação bem-sucedida")
         except Exception as e:
             raise Exception(f"Erro na autenticação do Google Sheets: {e}")
-
+        
         try:
             self.planilha = self.client.open_by_key(planilha_id)
             self.worksheet = self.planilha.worksheet(worksheet_name)
@@ -22,8 +23,8 @@ class GSheetsManager:
             raise Exception(f"Planilha com ID {planilha_id} não encontrada.")
         except gspread.exceptions.WorksheetNotFound:
             raise Exception(f"Aba {worksheet_name} não encontrada na planilha.")
-
-        # Verificar se a aba tem cabeçalhos
+        
+        # Verificar se a aba tem cabeçalhos e se não tiver, adicioná-los
         if len(self.worksheet.get_all_values()) < 1:
             self.worksheet.append_row([
                 "Nome", "E-mail", "Telefone", "Data de Nascimento", "Gênero", "Etnia", 
@@ -35,7 +36,7 @@ class GSheetsManager:
 
     def registrar_candidatura(self, dados):
         dados["Data Registro"] = datetime.now().strftime("%d/%m/%Y %H:%M")
-
+        
         row_data = [
             dados.get("Nome", ""),
             dados.get("E-mail", ""),
@@ -59,9 +60,11 @@ class GSheetsManager:
             dados.get("Resultado", ""),  # Resultado da classificação
             dados["Data Registro"]
         ]
-
+        
         try:
             self.worksheet.append_row(row_data)
+            print(f"Dados adicionados com sucesso: {row_data}")
             return True
         except Exception as e:
             raise Exception(f"Erro ao adicionar dados na planilha: {e}")
+
