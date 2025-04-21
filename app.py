@@ -2,6 +2,8 @@ import streamlit as st
 import json
 from gsheets import GSheetsManager
 from datetime import datetime
+if 'form_submitted' not in st.session_state:
+    st.session_state.form_submitted = False
 
 # Função de classificação da vaga (simulada para fins de exemplo)
 def classificar_vaga(dados):
@@ -67,6 +69,9 @@ if st.button("Enviar Inscrição"):
         "Interesse Estágio": interesse_estagio,
     }
 
+    if st.button("Enviar Inscrição") or st.session_state.form_submitted:
+    st.session_state.form_submitted = True
+    
     try:
         resultado_classificacao, detalhes_classificacao = classificar_vaga(dados)
         dados["Resultado"] = resultado_classificacao
