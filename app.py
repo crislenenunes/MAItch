@@ -2,12 +2,13 @@ import streamlit as st
 import json
 from gsheets import GSheetsManager
 from datetime import datetime
+
+# Inicialização do estado da sessão
 if 'form_submitted' not in st.session_state:
     st.session_state.form_submitted = False
 
-# Função de classificação da vaga (simulada para fins de exemplo)
+# Função de classificação da vaga
 def classificar_vaga(dados):
-    # Aqui você pode incluir a lógica de classificação com base nas informações do candidato
     if dados.get("PCD") == "Sim":
         return "Aprovado - PCD", "Candidato com deficiência aprovado"
     else:
@@ -15,38 +16,38 @@ def classificar_vaga(dados):
 
 # --- Conexão com Google Sheets ---
 try:
-    # Carregar credenciais do Google Sheets
     service_account_json = st.secrets["SERVICE_ACCOUNT_JSON"]
     GCP_CREDS = json.loads(service_account_json)
     
-    # Criando a instância de GSheetsManager
     SHEETS_MANAGER = GSheetsManager(
         credenciais=GCP_CREDS,
-        planilha_id="1ZOvtUy2dcMIIKG4E-aHSpxzWIZgCcRdav7jo2WWY2nk",  # Use seu ID correto
-        worksheet_name="RespostasCV"  # Use o nome correto da aba
+        planilha_id="1ZOvtUy2dcMIIKG4E-aHSpxzWIZgCcRdav7jo2WWY2nk",
+        worksheet_name="RespostasCV"
     )
-    
     st.success("Conexão com Google Sheets estabelecida com sucesso!")
 except Exception as e:
     st.error(f"Erro ao conectar com Google Sheets: {e}")
     st.stop()
 
-# Formulário de inscrição (exemplo simples)
+# Formulário de inscrição
 st.title("Formulário de Inscrição")
-nome = st.text_input("Nome")
-email = st.text_input("E-mail")
-telefone = st.text_input("Telefone")
-data_nascimento = st.date_input("Data de Nascimento")
-genero = st.selectbox("Gênero", ["Masculino", "Feminino", "Outro"])
-etnia = st.selectbox("Etnia", ["Branco", "Negro", "Pardo", "Indígena", "Outro"])
-pcd = st.selectbox("Você é PCD?", ["Sim", "Não"])
+with st.form(key='inscricao_form'):
+    nome = st.text_input("Nome")
+    email = st.text_input("E-mail")
+    telefone = st.text_input("Telefone")
+    data_nascimento = st.date_input("Data de Nascimento")
+    genero = st.selectbox("Gênero", ["Masculino", "Feminino", "Outro"])
+    etnia = st.selectbox("Etnia", ["Branco", "Negro", "Pardo", "Indígena", "Outro"])
+    pcd = st.selectbox("Você é PCD?", ["Sim", "Não"])
+    interesse_crm = st.checkbox("Tenho interesse em CRM")
+    interesse_estagio = st.checkbox("Tenho interesse em Estágio")
+    
+    submitted = st.form_submit_button("Enviar Inscrição")
 
-# Condições adicionais baseadas nas respostas
-interesse_crm = st.checkbox("Tenho interesse em CRM")
-interesse_estagio = st.checkbox("Tenho interesse em Estágio")
-
-# Registrar candidatura
-if st.button("Enviar Inscrição"):
+# Processamento do formulário
+if submitted or st.session_state.form_submitted:
+    st.session_state.form_submitted = True
+    
     dados = {
         "Nome": nome,
         "E-mail": email,
@@ -56,29 +57,30 @@ if st.button("Enviar Inscrição"):
         "Etnia": etnia,
         "LGBT": "Não",
         "PCD": pcd,
-        "Cursando": "Sim",  # Exemplo fixo
-        "Semestre": 3,  # Exemplo fixo
-        "Curso": "Curso de Exemplo",  # Exemplo fixo
-        "Instituição": "Instituição de Exemplo",  # Exemplo fixo
-        "Previsão de Conclusão": "2026",  # Exemplo fixo
-        "Computador": "Sim",  # Exemplo fixo
-        "Disponibilidade": "Sim",  # Exemplo fixo
-        "Inglês": "Intermediário",  # Exemplo fixo
-        "Capacitação Anterior": "Não",  # Exemplo fixo
+        "Cursando": "Sim",
+        "Semestre": 3,
+        "Curso": "Curso de Exemplo",
+        "Instituição": "Instituição de Exemplo",
+        "Previsão de Conclusão": "2026",
+        "Computador": "Sim",
+        "Disponibilidade": "Sim",
+        "Inglês": "Intermediário",
+        "Capacitação Anterior": "Não",
         "Interesse CRM": interesse_crm,
         "Interesse Estágio": interesse_estagio,
     }
 
-    if st.button("Enviar Inscrição") or st.session_state.form_submitted:
-    st.session_state.form_submitted = True
-    
     try:
         resultado_classificacao, detalhes_classificacao = classificar_vaga(dados)
         dados["Resultado"] = resultado_classificacao
-        
-        # Registrar dados na planilha do Google Sheets
         SHEETS_MANAGER.registrar_candidatura(dados)
-        
         st.success(f"Inscrição enviada com sucesso! {detalhes_classificacao}")
+        
+        # Opção para novo cadastro
+        if st.button("Fazer nova inscrição"):
+            st.session_state.form_submitted = False
+            st.experimental_rerun()
+            
     except Exception as e:
         st.error(f"Erro ao enviar inscrição: {e}")
+        st.session_state.form_submitted = False
