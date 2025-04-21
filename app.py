@@ -6,6 +6,13 @@ from datetime import datetime
 from gsheets import GSheetsManager
 import os
 
+# Acessando os segredos do Streamlit
+SERVICE_ACCOUNT_JSON = st.secrets["SERVICE_ACCOUNT_JSON"]
+
+# Agora, você pode usar a chave JSON no código
+import json
+service_account_info = json.loads(SERVICE_ACCOUNT_JSON)
+
 # --- Inicialização das cotas ---
 VAGAS_TOTAIS = 50
 LISTA_ESPERA_MAX = 63  # 50 + 25%
