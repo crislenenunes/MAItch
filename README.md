@@ -1,146 +1,175 @@
-# Programa de Capacitação CRMAItch
-
-Este repositório apresenta o sistema completo de inscrição, avaliação e classificação de candidatos do Programa de Capacitação CRMAItch. Desenvolvido com foco em diversidade, inclusão e transformação social, o projeto integra tecnologias modernas como Gradio, Google Sheets e algoritmos de aprendizado de máquina para garantir a equidade na seleção de talentos nas áreas de CRM e Inteligência Artificial.
-
-> Acesse o projeto no Hugging Face: [https://huggingface.co/spaces/Crislene/MAITch]
-
----
+# Programa de Capacitação CRMAItch – Seleção Inteligente para Diversidade em CRM e IA
 
 ## Visão Geral
 
-O Programa de Capacitação CRMatch tem como propósito central democratizar o acesso ao conhecimento e às oportunidades profissionais em tecnologia. A iniciativa visa incluir grupos historicamente sub-representados no mercado de trabalho, promovendo capacitação técnica aliada à prática profissional, especialmente nas áreas de Customer Relationship Management (CRM) e Inteligência Artificial.
+O **CRMAItch** é um sistema inteligente de **classificação de candidatos** para programas de capacitação com foco em CRM (Customer Relationship Management) e Inteligência Artificial. O projeto visa apoiar processos seletivos mais **inclusivos, objetivos e baseados em dados**, respeitando critérios técnicos e de diversidade.
 
-Grupos prioritários incluem:
-- Mulheres;
-- Pessoas negras, pardas e indígenas;
-- Pessoas com deficiência (PCD), incluindo neurodiversas;
-- Pessoas LGBTQIA+.
+O sistema foi desenvolvido durante o Bootcamp de LLM da SoulCode Academy, com tecnologias open-source, e está disponível como um aplicativo web interativo no Hugging Face Spaces.
 
-O projeto adota um processo de seleção estruturado em critérios objetivos, garantindo tanto a diversidade quanto a aderência aos requisitos da capacitação e estágio. O sistema automatiza desde a inscrição até a classificação, respeitando um modelo híbrido de cotas e ampla concorrência.
+[🔗 Acessar o Space](https://huggingface.co/spaces/Crislene/MAITch)
 
 ---
 
-## Funcionalidades
+## Objetivos
 
-### 1. Sistema de Cotas Integrado
-
-O sistema de cotas implementado assegura uma distribuição justa e proporcional das vagas. A lógica de classificação reserva as seguintes proporções:
-
-- **10%**: Pessoas com deficiência (PCD), com atenção especial à neurodiversidade;
-- **10%**: Pessoas negras, pardas e indígenas;
-- **10%**: Mulheres e pessoas não binárias;
-- **5%**: Pessoas LGBTQIA+;
-- **65%**: Ampla concorrência (candidatos que atendem aos critérios técnicos, sem estar em grupos de cota).
-
-Candidatos podem ser classificados em mais de um critério de diversidade, mas a priorização obedece a uma ordem lógica de preenchimento. Ao atingir o limite de vagas de cada grupo, os candidatos excedentes são realocados para a ampla concorrência, respeitando os critérios mínimos de elegibilidade.
-
-### 2. Classificação de Candidatos com Base em Critérios Técnicos e de Diversidade
-
-#### a) Elegibilidade Técnica
-
-Para ser considerado apto à capacitação, o candidato deve atender aos seguintes critérios:
-
-- Estar cursando ensino superior a partir do 2º semestre;
-- Ter previsão de formatura com pelo menos 13 meses de antecedência;
-- Possuir computador e acesso à internet;
-- Ter disponibilidade de horário compatível;
-- Aceitar participar de estágio após a capacitação;
-- Demonstrar interesse em atuar com CRM.
-
-#### b) Distribuição de Vagas
-
-Com base nos dados coletados, o sistema atribui o resultado final conforme as cotas e os critérios técnicos. As opções de retorno ao candidato são:
-
-- **Aprovado**: Vaga confirmada, dentro da cota ou ampla concorrência;
-- **Lista de Espera**: Vagas preenchidas, mas com possibilidade de realocação futura;
-- **Não Aprovado**: Critérios técnicos não atendidos. A resposta é sempre respeitosa, sem detalhamento dos motivos da não aprovação.
-
-### 3. Modelo de Classificação com Machine Learning
-
-O núcleo inteligente do sistema é um **modelo de árvore de decisão**, treinado com **20.000 registros simulados** para representar diferentes perfis de candidatos. O modelo é responsável por analisar múltiplos fatores simultaneamente, atribuindo uma classificação final a cada candidatura.
-
-#### Principais características do modelo:
-
-- **Tipo**: Árvore de Decisão (DecisionTreeClassifier – Scikit-learn);
-- **Dados de treinamento**: Sintéticos, balanceados e variados;
-- **Variáveis analisadas**: Gênero, etnia, orientação sexual, deficiência, semestre atual, previsão de formatura, acesso a computador, nível de inglês, disponibilidade, interesse em CRM e estágio, entre outras;
-- **Saída**: Aprovado ou não aprovado, com posterior aplicação da regra de distribuição por cotas.
-
-Além da classificação, o sistema gera **métricas de desempenho**, como matriz de confusão, curva ROC e importância das variáveis (feature importance), permitindo avaliar e ajustar continuamente a assertividade do modelo.
-
-### 4. Integração com o Google Sheets
-
-Todas as candidaturas são registradas automaticamente em uma aba dedicada no Google Sheets por meio de autenticação via API do Google. A conexão é estabelecida com uma chave de serviço configurada através de variável de ambiente (`SERVICE_ACCOUNT_JSON`), garantindo segurança e sigilo dos dados.
-
-A planilha armazena as seguintes colunas:
-
-- Nome completo;
-- E-mail;
-- Telefone;
-- Data de nascimento;
-- Gênero;
-- Etnia;
-- Identificação LGBTQIA+;
-- Identificação como PCD e tipo de deficiência;
-- Curso, instituição, semestre atual e previsão de conclusão;
-- Acesso a computador e internet;
-- Nível de inglês;
-- Participação anterior em capacitações;
-- Interesse em CRM e estágio;
-- Resultado da classificação;
-- Data de inscrição.
-
-### 5. Interface com Gradio
-
-O formulário interativo foi desenvolvido com a biblioteca Gradio, proporcionando uma experiência acessível, intuitiva e responsiva aos candidatos.
-
-#### Campos Dinâmicos
-
-O sistema possui lógica condicional: campos adicionais são exibidos dependendo das respostas do candidato. Por exemplo, ao selecionar “Sim” para PCD, surgem campos específicos para descrição da deficiência e necessidades de acessibilidade.
-
-### 6. Inteligência de Dados (Funcionalidade Complementar)
-
-Para análise exploratória, o projeto oferece um módulo de clusterização com KMeans, que permite agrupar os candidatos de acordo com características como gênero, etnia e semestre. Essa funcionalidade, embora opcional, fornece insumos valiosos para ajustes de estratégia de inclusão e políticas futuras.
+- Automatizar o processo de avaliação de elegibilidade para programas de capacitação
+- Garantir a reserva mínima de 35% das vagas para candidatos de grupos diversos
+- Proporcionar uma triagem transparente, justa e auditável
+- Promover a inclusão de mulheres, negros, indígenas, LGBTQIAPN+ e pessoas com deficiência
 
 ---
 
-## Fluxo de Funcionamento
+## Arquitetura da Solução
 
-1. **Preenchimento do Formulário**: O candidato fornece seus dados de forma voluntária.
-2. **Validação e Classificação com IA**: O modelo de árvore de decisão avalia a candidatura com base técnica e de diversidade.
-3. **Resposta Automatizada**: O candidato recebe mensagem de aprovação, reprovação ou espera.
-4. **Registro da Inscrição**: A candidatura é enviada automaticamente ao Google Sheets.
-5. **Análise Preditiva (opcional)**: Clusters são gerados para compreensão de perfis.
-
----
-
-## Melhorias Futuras
-
-- Substituição do modelo atual por Random Forest ou XGBoost, para maior robustez e capacidade preditiva;
-- Dashboard interativo: Visualização gráfica da distribuição dos inscritos, vagas por cota, taxa de aprovação e outros indicadores;
-- Aprimoramento em acessibilidade: Inclusão de suporte multilíngue e leitores de tela para maior inclusão digital;
-- Expansão do programa: Possibilidade de aplicação do mesmo modelo para outras áreas, como marketing digital, análise de dados e desenvolvimento front-end.
+| Camada              | Tecnologia            | Descrição                                      |
+|---------------------|------------------------|------------------------------------------------|
+| Interface Web       | Gradio                 | Formulário de inscrição e retorno personalizado |
+| Lógica de Negócio   | Python 3.10            | Classificação e verificação de critérios        |
+| Modelo de ML        | Scikit-learn           | Classificador baseado em Árvore de Decisão     |
+| Armazenamento       | Google Sheets (via gspread) | Registro automatizado dos dados           |
+| Hospedagem          | Hugging Face Spaces    | Deploy do sistema em ambiente web              |
 
 ---
 
-## Autoria
+## Modelo de Classificação
 
-Este projeto foi idealizado, desenvolvido e documentado por **Crislene Nunes** durante o Bootcamp de LLM (Modelos de Linguagem de Grande Escala) da **SoulCode Academy**, com apoio institucional do **Grupo Petrópolis**. A iniciativa integra competências em desenvolvimento de sistemas, inteligência artificial aplicada e inclusão sociotécnica.
+O modelo utilizado é uma **Árvore de Decisão**, escolhida pela sua interpretabilidade e boa performance em bases estruturadas com múltiplos critérios. Foram utilizadas **20.000 entradas simuladas** com balanceamento entre ampla concorrência e diversidade.
+
+### Algoritmo
+
+```python
+DecisionTreeClassifier(
+    max_depth=5,
+    min_samples_leaf=4,
+    class_weight='balanced',
+    random_state=42
+)
+```
+
+### Variáveis de Entrada
+
+- `genero`
+- `etnia`
+- `lgbt`
+- `pcd`
+- `semestre`
+- `previsao_conclusao`
+- `computador`
+- `disponibilidade`
+- `ingles`
+- `capacitacao_anterior`
+- `interesse_crm`
+- `interesse_estagio`
+
+A variável alvo `resultado` define se o(a) candidato(a) será aprovado ou não.
 
 ---
 
-## Licença e Uso
+## Regras de Elegibilidade
 
-Este repositório está disponível **exclusivamente para fins educacionais e demonstrativos**. É vedada a utilização comercial, modificação para uso corporativo ou qualquer redistribuição sem a autorização expressa da autora.
+| Critério                         | Requisito                             |
+|----------------------------------|----------------------------------------|
+| Semestre                         | A partir do 2º                         |
+| Previsão de Conclusão            | Pelo menos 13 meses até a conclusão   |
+| Computador e Internet            | Obrigatório                            |
+| Disponibilidade de horário       | Não pode ser eventual                 |
+| Aceite para Estágio              | Obrigatório                            |
 
+Candidatos que não cumprirem esses critérios recebem uma resposta padrão positiva, mas não avançam na seleção.
 
-## Melhorias Futuras
+---
 
-- **Aprimoramento do Modelo de Classificação**: O uso de técnicas avançadas de aprendizado de máquina pode ser integrado para melhorar a precisão do modelo de seleção de candidatos.
-  
-- **Análise de Dados e Relatórios**: A geração de relatórios detalhados sobre as inscrições, distribuição de vagas e análise de diversidade pode ser automatizada para fornecer insights mais profundos.
+## Lógica de Cotas e Classificação
 
-- **Expansão para Outras Áreas**: O programa pode ser expandido para outras áreas além de CRM e IA, como marketing digital ou recursos humanos, aumentando as oportunidades de inclusão.
+### Reservas:
 
+- **35%** das vagas para grupos diversos (gênero, etnia, LGBTQIAPN+, PCD)
+- **65%** para ampla concorrência
 
+### Prioridade:
 
+1. Elegíveis e diversos → vaga em cota
+2. Elegíveis não diversos → ampla concorrência
+3. Diversos sem vaga → ampla concorrência
+4. Se não elegível → não aprovado
+
+---
+
+## Métricas de Avaliação
+
+O modelo foi avaliado com base em uma amostra de teste com os seguintes resultados:
+
+```text
+              precision    recall  f1-score   support
+
+           0       0.88      0.90      0.89        65
+           1       0.84      0.80      0.82        35
+
+    accuracy                           0.86       100
+   macro avg       0.86      0.85      0.85       100
+weighted avg       0.86      0.86      0.86       100
+```
+
+---
+
+## Estrutura do Projeto
+
+```
+CRMAItch/
+├── app.py                          # Formulário Gradio com lógica principal
+├── classificador_diversidade.py   # Modelo de árvore de decisão e regras
+├── gsheets.py                     # Integração com planilha Google Sheets
+├── requirements.txt               # Dependências do projeto
+├── README.md                      # Documentação
+```
+
+---
+
+## Como Executar
+
+### Requisitos
+
+- Python 3.10+
+- Conta com acesso a uma planilha no Google Sheets (e credenciais configuradas)
+
+### Instalação
+
+```bash
+git clone https://github.com/seu_usuario/CRMAItch.git
+cd CRMAItch
+pip install -r requirements.txt
+```
+
+### Execução local
+
+```bash
+python app.py
+```
+
+---
+
+## Contribuição
+
+Contribuições são bem-vindas!
+
+1. Faça um fork
+2. Crie sua branch: `git checkout -b nova-feature`
+3. Faça commits claros: `git commit -m "feat: adiciona validação para campo X"`
+4. Suba sua branch: `git push origin nova-feature`
+5. Crie um Pull Request
+
+---
+
+## Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+---
+
+<div align="center">  
+  <p>Desenvolvido com ❤️ por <a href="https://github.com/crislenenunes">Crislene Nunes</a> durante o Bootcamp de IA LLM da SoulCode</p>  
+  <img src="https://img.shields.io/badge/Python-3.10+-blue?logo=python" alt="Python">  
+  <img src="https://img.shields.io/badge/scikit--learn-1.3+-orange?logo=scikit-learn" alt="Scikit-learn">  
+  <img src="https://img.shields.io/badge/Gradio-4.28.3-green?logo=gradio" alt="Gradio">  
+</div>
+```
