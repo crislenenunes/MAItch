@@ -1,4 +1,4 @@
-# Maitch - Classificador de Diversidade para Capacitação
+# MAItch - Classificador de Diversidade para Capacitação
 
 ## Visão Geral
 
