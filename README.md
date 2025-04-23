@@ -2,6 +2,8 @@
 
 ## Visão Geral
 
+🔗 **Acesse o projeto:** [Hugging Face Space](https://huggingface.co/spaces/Crislene/Maitch)
+
 O **Maitch** é uma plataforma inteligente desenvolvida para otimizar a **seleção de candidatos para programas de capacitação** com base em critérios de diversidade e inclusão. Através de um modelo de **classificação preditiva**, o sistema analisa dados como etnia, gênero, PCD, inglês e experiência prévia, garantindo que o processo seletivo respeite as cotas de diversidade.
 
 ### Principais Funcionalidades
@@ -11,7 +13,6 @@ O **Maitch** é uma plataforma inteligente desenvolvida para otimizar a **seleç
 - **Análise de perfil** de acordo com critérios definidos para a vaga  
 - **Sugestões de desenvolvimento** com base na análise dos dados dos candidatos
 
-🔗 **Acesse o projeto:** [Hugging Face Space](https://huggingface.co/spaces/Crislene/Maitch)
 
 ---
 
